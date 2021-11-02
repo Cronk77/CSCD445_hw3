@@ -42,7 +42,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[(i + 3) * pitch + j] = g_dataA[(i + 3) * pitch +  j];
     }
 
-    _syncthreads();
+    __syncthreads();
     //float jacobiValue = runJacobi(colNum, northValue, middleValue, southValue);
 
     //s_data[0] += jacobiValue;
