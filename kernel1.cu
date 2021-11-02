@@ -24,9 +24,9 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
    // int colNum = j % 3; // 3 is the number of rows we are looking at each time
     
     //get the top, middle and bottom value at the given i and j location
-    int northValue = g_dataA[(i-1) * floatpitch +  j];
+    int northValue = g_dataA[(i - 1) * floatpitch +  j];
     int middleValue = g_dataA[i * floatpitch + j];
-    int southValue = g_dataA[(i+1) * floatpitch +  j];
+    int southValue = g_dataA[(i + 1) * floatpitch +  j];
 
     //save the values from the columns we created into shared memory
     s_data[(i - 1) * floatpitch + j] = northValue;
@@ -53,7 +53,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
 __device__ float runJacobi(int colNum, int northValue, int middleValue, int southValue)
 {
-
+    return 1.0;
 
 }
 
