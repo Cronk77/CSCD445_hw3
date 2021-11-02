@@ -24,7 +24,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     s_data[blockDim.x * threadIdx.x + threadIdx.y] = g_dataA[i * floatpitch + j];
 
     //check for out of bounds and grab the 2 extra columns we need an will miss in our current block
-    if(threadIdx.x == blockDim.x-1 && i + 2 < width && ((i + 3) * floatpitch + j) < width)
+    /*if(threadIdx.x == blockDim.x-1 && i + 2 < width && ((i + 3) * floatpitch + j) < width)
     {
         s_data[(i) * floatpitch + j] = g_dataA[(i) * floatpitch +  j];
         s_data[(i + 1) * floatpitch + j] = g_dataA[(i + 1) * floatpitch +  j];
@@ -33,7 +33,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[(i + 1) * floatpitch + j] = g_dataA[(i + 1) * floatpitch +  j];
         s_data[(i + 2) * floatpitch + j] = g_dataA[(i + 2) * floatpitch +  j];
         s_data[(i + 3) * floatpitch + j] = g_dataA[(i + 3) * floatpitch +  j];
-    }
+    }*/
 
     __syncthreads();
     //float jacobiValue = runJacobi(colNum, northValue, middleValue, southValue);
