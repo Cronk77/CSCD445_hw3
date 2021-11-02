@@ -21,17 +21,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     if( i >= width - 1|| j >= width - 1 || i < 1 || j < 1 ) return;
 
-   // int colNum = j % 3; // 3 is the number of rows we are looking at each time
-    
-    //get the top, middle and bottom value at the given i and j location
-    int northValue = g_dataA[(i - 1) * floatpitch +  j];
-    int middleValue = g_dataA[i * floatpitch + j];
-    int southValue = g_dataA[(i + 1) * floatpitch +  j];
-
-    //save the values from the columns we created into shared memory
-    s_data[(i - 1) * floatpitch + j] = northValue;
-    s_data[i * floatpitch + j] = middleValue;
-    s_data[(i + 1) * floatpitch + j] = southValue;
+    s_data[blockDim.x * threadIdx.x + threadIdx.y] = g_dataA[i * floatpitch + j];
 
     //check for out of bounds and grab the 2 extra columns we need an will miss in our current block
     if(threadIdx.x == blockDim.x-1 && i + 2 < width && ((i + 3) * floatpitch + j) < width)
