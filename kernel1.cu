@@ -31,15 +31,15 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     if(threadIdx.y == blockDim.y - 1)
     {
-        s_data[blockDim.y * threadIdx.x + (threadIdx.y + 2)] = g_dataA[ i * pitch + (j + 1)]; //E
-        s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 2)] = g_dataA[ (i + 1) * pitch + (j + 1)]; //SE
-        s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y + 2)] = g_dataA[ (i - 1) * pitch + (j + 1)]; //NE
+        s_data[blockDim.y * threadIdx.x + (threadIdx.y + 2)] = g_dataA[ i * floatpitch + (j + 1)]; //E
+        s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 2)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
+        s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y + 2)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
 
     }else if(threadIdx.y == 1)
     {
-        s_data[blockDim.y * threadIdx.x + threadIdx.y] = g_dataA[ i * pitch + (j - 1)]; //W
-        s_data[blockDim.y * (threadIdx.x + 1) + threadIdx.y] = g_dataA[ (i + 1) * pitch + (j - 1)]; //SW
-        s_data[blockDim.y * (threadIdx.x - 1) + threadIdx.y] = g_dataA[ (i - 1) * pitch + (j - 1)]; //NW
+        s_data[blockDim.y * threadIdx.x + threadIdx.y] = g_dataA[ i * floatpitch + (j - 1)]; //W
+        s_data[blockDim.y * (threadIdx.x + 1) + threadIdx.y] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
+        s_data[blockDim.y * (threadIdx.x - 1) + threadIdx.y] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
     }
 
     __syncthreads();
@@ -65,8 +65,8 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     }else
     {
         jacobiValue = runJacobi(0, north, middle, south);
-        jacobiValue += s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 1)]
-        jacobiValue += s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 2)]
+        jacobiValue += s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 1)];
+        jacobiValue += s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 2)];
         jacobiValue = jacobiValue * 0.95f;
     }
 
@@ -78,7 +78,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 1)] = jacobiValue;
     }
 
-    /move data to output array
+    //move data to output array -- might be padded so this might not work --
     g_dataB[blockDim.y * threadIdx.x + threadIdx.y] = s_data[blockDim.y * threadIdx.x + threadIdx.y];
 }
 
