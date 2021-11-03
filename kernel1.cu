@@ -27,11 +27,11 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     //if(threadIdx.y >= blockDim.y - 1) return;
 
-    if(i == 1 && j == 1){
+    if(i == 1){
         printf("%d %d %d %d", threadIdx.x, threadIdx.y, blockDim.y, blockDim.x);
     }
 
-    s_data[blockDim.y * threadIdx.x + threadIdx.y] = g_dataA[i * floatpitch + j]; //middle
+    /*s_data[blockDim.y * threadIdx.x + threadIdx.y] = g_dataA[i * floatpitch + j]; //middle
     s_data[blockDim.y * (threadIdx.x + 1) + threadIdx.y] = g_dataA[(i + 1) * floatpitch + j]; //south
     s_data[blockDim.y * (threadIdx.x - 1) + threadIdx.y] = g_dataA[(i - 1) * floatpitch + j]; //north
     
@@ -63,6 +63,6 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
                               0.1f * s_data[blockDim.y * threadIdx.x + (threadIdx.y - 1)]       +       //W
                               0.1f * s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y - 1)]         //NW
                            ) * 0.95f;
-    }
+    }*/
 }
 
