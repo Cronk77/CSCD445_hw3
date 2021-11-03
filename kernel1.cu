@@ -79,7 +79,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     __syncthreads();
 
     //move data to output array
-    if(blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1) < blockDim.y)
+    //if(blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1) < blockDim.y)
         g_dataB[i * floatpitch + j] = s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1)];
 }
 
