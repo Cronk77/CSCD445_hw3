@@ -4,7 +4,4 @@
 
 __global__ void k1( float* g_dataA, float* g_dataB, int dataWidth, int width);
 
-__device__ float runJacobi(int isMiddle, float northValue, float middleValue, float southValue);
-
-
 #endif
