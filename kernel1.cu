@@ -75,11 +75,11 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     //if we have a correct jacobiValue, store it at the middle location
     if(colNum == 1)
     {
-        s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 1)] = jacobiValue;
+        s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1)] = jacobiValue;
     }
 
     //move data to output array -- might be padded so this might not work --
-    g_dataB[blockDim.y * threadIdx.x + threadIdx.y] = s_data[blockDim.y * threadIdx.x + threadIdx.y];
+    g_dataB[i * floatpitch + j] = s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1)];
 }
 
 __device__ float runJacobi(int isMiddle, float northValue, float middleValue, float southValue)
