@@ -78,6 +78,8 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1)] = jacobiValue;
     }
 
+    __syncthreads();
+
     //move data to output array -- might be padded so this might not work --
     g_dataB[i * floatpitch + j] = s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1)];
 }
