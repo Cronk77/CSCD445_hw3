@@ -23,29 +23,32 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     j = j + 1;
 
-    if(threadIdx.y == 0 || i >= width - 1|| j >= width - 1 || i < 1 || j < 1 ) return;
+    if(i >= width - 1|| j >= width - 1 || i < 1 || j < 1 ) return;
 
-    s_data[blockDim.y * threadIdx.x + threadIdx.y] = g_dataA[i * floatpitch + j]; //middle
-    s_data[blockDim.y * (threadIdx.x + 1) + threadIdx.y] = g_dataA[(i + 1) * floatpitch + j]; //south
-    s_data[blockDim.y * (threadIdx.x - 1) + threadIdx.y] = g_dataA[(i - 1) * floatpitch + j]; //north
-    
-    if(threadIdx.y == blockDim.y - 1 || i == width - 2)
+    if(threadIdx != 0)
     {
-        s_data[blockDim.y * threadIdx.x + (threadIdx.y + 1)] = g_dataA[ i * floatpitch + (j + 1)]; //E
-        s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
-        s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y + 1)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
+        s_data[blockDim.y * threadIdx.x + threadIdx.y] = g_dataA[i * floatpitch + j]; //middle
+        s_data[blockDim.y * (threadIdx.x + 1) + threadIdx.y] = g_dataA[(i + 1) * floatpitch + j]; //south
+        s_data[blockDim.y * (threadIdx.x - 1) + threadIdx.y] = g_dataA[(i - 1) * floatpitch + j]; //north
+        
+        if(threadIdx.y == blockDim.y - 1 || i == width - 2)
+        {
+            s_data[blockDim.y * threadIdx.x + (threadIdx.y + 1)] = g_dataA[ i * floatpitch + (j + 1)]; //E
+            s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
+            s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y + 1)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
 
-    }else if(threadIdx.y == 1)
-    {
-        s_data[blockDim.y * threadIdx.x + (threadIdx.y - 1)] = g_dataA[ i * floatpitch + (j - 1)]; //W
-        s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 1)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
-        s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y - 1)] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
+        }else if(threadIdx.y == 1)
+        {
+            s_data[blockDim.y * threadIdx.x + (threadIdx.y - 1)] = g_dataA[ i * floatpitch + (j - 1)]; //W
+            s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 1)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
+            s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y - 1)] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
+        }
     }
 
     __syncthreads();
 
-    //if(threadIdx.y > 0 && threadIdx.y < width - 1 && threadIdx.x > 0 && threadIdx.x < width - 1)
-    //{
+    if(threadIdx.y > 0 && threadIdx.y < width - 1 && threadIdx.x > 0 && threadIdx.x < width - 1)
+    {
         g_dataB[i * floatpitch + j] = (
                               0.2f * s_data[blockDim.y * threadIdx.x + threadIdx.y]              +       //itself
                               0.1f * s_data[blockDim.y * (threadIdx.x - 1) + threadIdx.y]       +       //N
@@ -57,8 +60,6 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
                               0.1f * s_data[blockDim.y * threadIdx.x + (threadIdx.y - 1)]       +       //W
                               0.1f * s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y - 1)]         //NW
                            ) * 0.95f;
-    //}
-
-    __syncthreads();
+    }
 }
 
