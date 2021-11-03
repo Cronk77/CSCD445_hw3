@@ -25,7 +25,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     if(i >= width - 1|| j >= width - 1 || i < 1 || j < 1 ) return;
 
-    if(threadIdx.y >= blockDim.y - 1 || threadIdx.y < 1 || threadIdx.x < 1) return;
+    if(threadIdx.y >= blockDim.y - 1 || threadIdx.x < 1) return;
 
     printf("made it!");
 
