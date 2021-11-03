@@ -36,12 +36,14 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
             s_data[blockDim.y * threadIdx.x + (threadIdx.y + 1)] = g_dataA[ i * floatpitch + (j + 1)]; //E
             s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y + 1)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
             s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y + 1)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
+            printf("0");
 
         }else if(threadIdx.y == 1)
         {
             s_data[blockDim.y * threadIdx.x + (threadIdx.y - 1)] = g_dataA[ i * floatpitch + (j - 1)]; //W
             s_data[blockDim.y * (threadIdx.x + 1) + (threadIdx.y - 1)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
             s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y - 1)] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
+            printf("1");
         }
     }
 
