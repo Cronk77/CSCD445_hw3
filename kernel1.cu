@@ -58,5 +58,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
                               0.1f * s_data[blockDim.y * (threadIdx.x - 1) + (threadIdx.y - 1)]         //NW
                            ) * 0.95f;
     //}
+
+    __syncthreads();
 }
 
