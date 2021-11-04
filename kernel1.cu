@@ -27,6 +27,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     if(i == 1 && threadIdx.x == 1)
     {
+        printf("this ran!");
         s_data[(threadIdx.x - 1) + blockDim.x] = g_dataA[ i * floatpitch + (j - 2)]; //W
         s_data[(threadIdx.x - 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 2)]; //SW
         s_data[(threadIdx.x - 1)] = g_dataA[ (i - 1) * floatpitch + (j - 2)]; //NW
@@ -52,7 +53,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     __syncthreads();
 
-    if(threadIdx.x == 0) return;
+    if(threadIdx.x == 0 || threadIdx.x == blockDim.x - 1) return;
 
     g_dataB[i * floatpitch + j] = (
                             0.2f * s_data[threadIdx.x + blockDim.x]             +       //itself
