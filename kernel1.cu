@@ -93,7 +93,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
             s_data[(threadIdx.x + 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + j]; //S
             s_data[threadIdx.x + 1] = g_dataA[ (i - 1) * floatpitch + j]; //N
         }
-    }
+   // }
 
     __syncthreads();
 
