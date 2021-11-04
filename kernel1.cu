@@ -38,8 +38,8 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
         s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
 
-        printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
-        printf("second: %f %f %f\n\n", s_data[threadIdx.x], s_data[threadIdx.x + blockDim.x], s_data[threadIdx.x + (2 * blockDim.x)]);
+        //printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
+        //printf("second: %f %f %f\n\n", s_data[threadIdx.x], s_data[threadIdx.x + blockDim.x], s_data[threadIdx.x + (2 * blockDim.x)]);
     }else if(i == width - 2 || threadIdx.x == width )
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
@@ -62,18 +62,20 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     __syncthreads();
 
-    if(threadIdx.x == 0 || threadIdx.x == blockDim.x - 1) return;
+    float currPosition = threadIdx.x + 1;
+
+    if(currPosition == blockDim.x - 2) return;
 
     g_dataB[i * floatpitch + j] = (
-                            0.2f * s_data[threadIdx.x + blockDim.x]             +       //itself
-                            0.1f * s_data[threadIdx.x]                          +       //N
-                            0.1f * s_data[threadIdx.x + 1]                      +       //NE
-                            0.1f * s_data[(threadIdx.x + 1) + blockDim.x]       +       //E
-                            0.1f * s_data[(threadIdx.x + 1) + (2 * blockDim.x)] +       //SE
-                            0.1f * s_data[threadIdx.x + (2 * blockDim.x)]       +       //S
-                            0.1f * s_data[(threadIdx.x - 1) + (2 * blockDim.x)] +       //SW
-                            0.1f * s_data[(threadIdx.x - 1) + blockDim.x]       +       //W
-                            0.1f * s_data[threadIdx.x - 1]                              //NW
+                            0.2f * s_data[currPosition + blockDim.x]             +       //itself
+                            0.1f * s_data[currPosition]                          +       //N
+                            0.1f * s_data[currPosition + 1]                      +       //NE
+                            0.1f * s_data[(currPosition + 1) + blockDim.x]       +       //E
+                            0.1f * s_data[(currPosition + 1) + (2 * blockDim.x)] +       //SE
+                            0.1f * s_data[currPosition + (2 * blockDim.x)]       +       //S
+                            0.1f * s_data[(currPosition - 1) + (2 * blockDim.x)] +       //SW
+                            0.1f * s_data[(currPosition - 1) + blockDim.x]       +       //W
+                            0.1f * s_data[currPosition - 1]                              //NW
                         ) * 0.95f;
 }
 
