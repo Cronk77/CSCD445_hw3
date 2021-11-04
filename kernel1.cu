@@ -25,7 +25,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     if(i >= width - 1|| j >= width - 1 || i < 1 || j < 1 ) return;
 
-    if(threadIdx.x < 1 || threadIdx.x >= width - 1) return;
+    if(threadIdx.x < 1 || threadIdx.x >= blockDim.x - 1) return;
 
     s_data[threadIdx.x + blockDim.x] = g_dataA[i * floatpitch + j]; //middle
     s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[(i + 1) * floatpitch + j]; //south
