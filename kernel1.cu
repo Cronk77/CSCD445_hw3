@@ -55,6 +55,10 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     __syncthreads();
 
+    if(blockIdx.x == 0 && threadIdx.x == 1){
+        printf("%f\n%f\n%f\n", s_data[threadIdx.x], s_data[threadIdx.x + blockDim.x], s_data[threadIdx.x + (2 * blockDim.x)]);
+    }
+
     if(threadIdx.x == 0) return;
 
     g_dataB[i * floatpitch + j] = (
