@@ -31,7 +31,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[(i + 1) * floatpitch + j]; //south
     s_data[threadIdx.x] = g_dataA[(i - 1) * floatpitch + j]; //north
     
-    if(threadIdx.x == blockDim.x - 2 || i == width - 2)
+    if(threadIdx.x == blockDim.x - 2)
     {
         s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + (j + 1)]; //E
         s_data[(threadIdx.x + 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
