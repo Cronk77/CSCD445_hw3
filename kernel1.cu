@@ -46,7 +46,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     __syncthreads();
 
-    g_dataB[(i + 1) * floatpitch + j] = (
+    g_dataB[i * floatpitch + j] = (
                             0.2f * s_data[threadIdx.x + blockDim.x]             +       //itself
                             0.1f * s_data[threadIdx.x]                          +       //N
                             0.1f * s_data[threadIdx.x + 1]                      +       //NE
