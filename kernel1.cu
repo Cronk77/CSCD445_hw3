@@ -35,6 +35,8 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
             s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + j]; //S
             s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + j]; //N
 
+            printf("%f %f %f\n", s_data[threadIdx.x], s_data[threadIdx.x + blockDim.x], s_data[threadIdx.x + (2 * blockDim.x)]);
+
             //grab our previous location values and store at previous location in shared memory
             s_data[(threadIdx.x - 1) + blockDim.x] = g_dataA[ i * floatpitch + (j - 1)]; //W
             s_data[(threadIdx.x - 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
