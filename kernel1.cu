@@ -62,7 +62,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     __syncthreads();
 
-    float currPosition = threadIdx.x + 1;
+    unsigned int currPosition = threadIdx.x + 1;
 
     if(currPosition == blockDim.x - 2) return;
 
