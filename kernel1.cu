@@ -23,7 +23,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     j = j + 1;
 
-    if( j == 1)
+    if( threadIdx.x == 1)
     {
         printf("%d", threadIdx.x);
     }
