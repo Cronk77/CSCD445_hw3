@@ -27,7 +27,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     //if(threadIdx.y >= blockDim.y - 1) return;
 
-    if(i == 1){
+    if(i == 3 && j == 7){
         printf("%d %d %d %d", threadIdx.x, threadIdx.y, blockDim.y, blockDim.x);
     }
 
