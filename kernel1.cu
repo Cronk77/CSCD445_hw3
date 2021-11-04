@@ -26,7 +26,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     if(i >= width - 1 || j >= width - 1 || i < 1 || j < 1 ) return;
 
     //if we are in the first column of blocks
-    if(blockIdx.x == 0){
+    /*if(blockIdx.x == 0){
 
         if(threadIdx.x == 1)
         {
@@ -62,7 +62,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
             s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + j]; //N
         }
     }else
-    {
+    { */
         if(threadIdx.x == 0)
         {
             //grab current value in the global memory and store at next value in shared memory because it should be at 1
@@ -74,7 +74,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
             s_data[threadIdx.x + blockDim.x] = g_dataA[ i * floatpitch + (j - 1)]; //W
             s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
             s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
-        }else if(i == width - 2 || threadIdx.x == width - 1)
+        }else if(i == width - 2 || threadIdx.x == width )
         {
             //grab current value in the global memory and store at next value in shared memory because it should be at 1
             s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + j]; //middle
@@ -94,31 +94,6 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
             s_data[threadIdx.x + 1] = g_dataA[ (i - 1) * floatpitch + j]; //N
         }
     }
-
-
-    /*if(blockIdx.x == 0 && threadIdx.x == 1)
-    {
-        s_data[(threadIdx.x - 1) + blockDim.x] = g_dataA[ i * floatpitch + (j - 1)]; //W
-        s_data[(threadIdx.x - 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
-        s_data[(threadIdx.x - 1)] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
-
-    }else if(threadIdx.x == 0)
-    {
-        s_data[threadIdx.x + blockDim.x] = g_dataA[ i * floatpitch + (j - 1)]; //W
-        s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
-        s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
-
-    }else if(j == width - 2 && threadIdx.x == blockDim.x - 2)
-    {
-        s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + (j + 1)]; //E
-        s_data[(threadIdx.x + 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
-        s_data[(threadIdx.x + 1)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
-    }else if(threadIdx.x == blockDim.x - 1)
-    {
-        s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + (j + 1)]; //E
-        s_data[(threadIdx.x + 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
-        s_data[(threadIdx.x + 1)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
-    } */
 
     __syncthreads();
 
