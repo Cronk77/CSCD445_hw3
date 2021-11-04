@@ -25,7 +25,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     if( threadIdx.x == 1)
     {
-        printf("%f", g_dataA[ i * floatpitch + (j - 1)]);
+        printf("%f \n", g_dataA[ i * floatpitch + (j - 1)]);
     }
 
     if(i >= width - 1 || j >= width - 1 || i < 1 || j < 1 ) return;
