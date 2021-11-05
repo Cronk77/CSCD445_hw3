@@ -26,7 +26,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     if(i >= width - 1 || j >= width - 1 || i < 1 || j < 1 ) return;
 
 
-    if(threadIdx.x == 0)
+    if(threadIdx.x == 0 && blockIdx.x == 0)
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
         s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + j]; //middle
@@ -38,7 +38,10 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
         s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
 
-    }else if(threadIdx.x == blockDim.x - 2) //j == width - 2 || 
+        printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
+        printf("second: %f %f %f\n\n", s_data[threadIdx.x + 2], s_data[threadIdx.x + blockDim.x + 2], s_data[threadIdx.x + 2 + (2 * blockDim.x)]);
+
+    }else if(j == width - 2 || threadIdx.x == blockDim.x - 1)
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
         s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + j]; //middle
@@ -49,9 +52,6 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[(threadIdx.x + 2) + blockDim.x] = g_dataA[ i * floatpitch + (j + 1)]; //E
         s_data[(threadIdx.x + 2) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
         s_data[(threadIdx.x + 2)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
-
-        //printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
-        //printf("second: %f %f %f\n\n", s_data[threadIdx.x + 2], s_data[threadIdx.x + blockDim.x + 2], s_data[threadIdx.x + 2 + (2 * blockDim.x)]);
     }else
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
