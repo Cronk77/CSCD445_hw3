@@ -40,7 +40,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
         //printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
         //printf("second: %f %f %f\n\n", s_data[threadIdx.x], s_data[threadIdx.x + blockDim.x], s_data[threadIdx.x + (2 * blockDim.x)]);
-    }else if(i == width - 2 || threadIdx.x == width )
+    }else if(i == width - 2 || threadIdx.x == blockDim.x - 1)
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
         s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + j]; //middle
@@ -62,9 +62,10 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     __syncthreads();
 
+    //shift threadIdx.x by one because the entire matrix is shifted
     unsigned int currPosition = threadIdx.x + 1;
 
-    if(currPosition == blockDim.x - 1) return;
+    if(currPosition == blockDim.x - 2) return;
 
     g_dataB[i * floatpitch + j] = (
                             0.2f * s_data[currPosition + blockDim.x]             +       //itself
