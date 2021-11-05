@@ -79,7 +79,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     //shift threadIdx.x by one because the entire matrix is shifted
     unsigned int currPosition = threadIdx.x + 1;
 
-    if(currPosition >= blockDim.x - 1) return;
+    if(currPosition > blockDim.x - 1) return;
 
     g_dataB[i * floatpitch + j] = (
                             0.2f * s_data[currPosition + blockDim.x]             +       //itself
