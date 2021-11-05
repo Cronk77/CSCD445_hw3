@@ -25,8 +25,8 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     if(i >= width - 1 || j >= width - 1 || i < 1 || j < 1 ) return;
 
-    if(threadIdx.x >= blockDim.x - 1)
-    {}else{
+    //if(threadIdx.x >= blockDim.x - 1)
+    //{}else{
         if(threadIdx.x == 0)
         {
             //grab current value in the global memory and store at next value in shared memory because it should be at 1
@@ -57,7 +57,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
             s_data[(threadIdx.x + 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + j]; //S
             s_data[threadIdx.x + 1] = g_dataA[ (i - 1) * floatpitch + j]; //N
         }
-    }
+    //}
 
     __syncthreads();
 
