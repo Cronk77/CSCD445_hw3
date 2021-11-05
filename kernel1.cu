@@ -51,9 +51,9 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[(threadIdx.x + 2)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
 
         //grab our next location values and store at the +2 location of shared memory
-        s_data[(threadIdx.x + 3) + blockDim.x] = g_dataA[ i * floatpitch + (j + 2)]; //E
-        s_data[(threadIdx.x + 3) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 2)]; //SE
-        s_data[(threadIdx.x + 3)] = g_dataA[ (i - 1) * floatpitch + (j + 2)]; //NE
+        //s_data[(threadIdx.x + 3) + blockDim.x] = g_dataA[ i * floatpitch + (j + 2)]; //E
+        //s_data[(threadIdx.x + 3) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 2)]; //SE
+        //s_data[(threadIdx.x + 3)] = g_dataA[ (i - 1) * floatpitch + (j + 2)]; //NE
     }else
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
