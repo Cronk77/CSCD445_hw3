@@ -38,8 +38,8 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
         s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
 
-        //printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
-        //printf("second: %f %f %f\n\n", s_data[threadIdx.x + 2], s_data[threadIdx.x + blockDim.x + 2], s_data[threadIdx.x + 2 + (2 * blockDim.x)]);
+        printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
+        printf("second: %f %f %f\n\n", s_data[threadIdx.x + 2], s_data[threadIdx.x + blockDim.x + 2], s_data[threadIdx.x + 2 + (2 * blockDim.x)]);
 
     }else if(j == width - 2)
     {
@@ -76,7 +76,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     //shift threadIdx.x by one because the entire matrix is shifted
     unsigned int currPosition = threadIdx.x + 1;
 
-    if(currPosition == blockDim.x - 2) return;
+    if(currPosition == blockDim.x - 1) return;
 
     g_dataB[i * floatpitch + j] = (
                             0.2f * s_data[currPosition + blockDim.x]             +       //itself
