@@ -55,14 +55,14 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     }else if(threadIdx.x == blockDim.x - 2)
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
-        s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + j-1]; //middle
-        s_data[(threadIdx.x + 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + j-1]; //S
-        s_data[threadIdx.x + 1] = g_dataA[ (i - 1) * floatpitch + j-1]; //N
+        s_data[(threadIdx.x) + blockDim.x] = g_dataA[ i * floatpitch + j]; //middle
+        s_data[(threadIdx.x) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + j]; //S
+        s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + j]; //N
 
         //grab our next location values and store at the +2 location of shared memory
-        s_data[(threadIdx.x + 2) + blockDim.x] = g_dataA[ i * floatpitch + (j)]; //E
-        s_data[(threadIdx.x + 2) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j)]; //SE
-        s_data[(threadIdx.x + 2)] = g_dataA[ (i - 1) * floatpitch + (j)]; //NE
+        s_data[(threadIdx.x + 1) + blockDim.x] = g_dataA[ i * floatpitch + (j + 1)]; //E
+        s_data[(threadIdx.x + 1) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
+        s_data[(threadIdx.x + 1)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
     }else
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
