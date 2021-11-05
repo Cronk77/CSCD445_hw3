@@ -50,8 +50,10 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[(threadIdx.x + 2) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
         s_data[(threadIdx.x + 2)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
 
-        //printf("first: %f %f %f\n", s_data[(threadIdx.x + 1) + blockDim.x], s_data[(threadIdx.x + 1) + (2 * blockDim.x)], s_data[threadIdx.x + 1]);
-        printf("%f %f %f\n", s_data[(threadIdx.x + 3) + blockDim.x], s_data[(threadIdx.x + 3) + (2 * blockDim.x)], s_data[threadIdx.x + 3]);
+        //grab our next location values and store at the +2 location of shared memory
+        s_data[(threadIdx.x + 3) + blockDim.x] = g_dataA[ i * floatpitch + (j + 2)]; //E
+        s_data[(threadIdx.x + 3) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 2)]; //SE
+        s_data[(threadIdx.x + 3)] = g_dataA[ (i - 1) * floatpitch + (j + 2)]; //NE
     }else
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
@@ -65,7 +67,7 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     //shift threadIdx.x by one because the entire matrix is shifted
     unsigned int currPosition = threadIdx.x + 1;
 
-    if(currPosition > blockDim.x - 1) return;
+    if(currPosition > blockDim.x) return;
 
     g_dataB[i * floatpitch + j] = (
                             0.2f * s_data[currPosition + blockDim.x]             +       //itself
