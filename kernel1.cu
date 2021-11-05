@@ -25,8 +25,10 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     if(i >= width - 1 || j >= width - 1 || i < 1 || j < 1 ) return;
 
-    if(threadIdx.x >= blockDim.x - 2 || (threadIdx.x == 0 && blockIdx.x != 0))
-    {}else{
+    if(blockIdx.x != 0 && threadIdx.x == 0)
+    {
+
+    }else{
         if(threadIdx.x == 0)
         {
             //grab current value in the global memory and store at next value in shared memory because it should be at 1
