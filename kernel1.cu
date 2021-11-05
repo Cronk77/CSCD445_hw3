@@ -38,8 +38,6 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[threadIdx.x + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j - 1)]; //SW
         s_data[threadIdx.x] = g_dataA[ (i - 1) * floatpitch + (j - 1)]; //NW
 
-        //printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
-        //printf("second: %f %f %f\n\n", s_data[threadIdx.x], s_data[threadIdx.x + blockDim.x], s_data[threadIdx.x + (2 * blockDim.x)]);
     }else if(i == width - 2 || threadIdx.x == blockDim.x - 1)
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
@@ -52,6 +50,8 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[(threadIdx.x + 2) + (2 * blockDim.x)] = g_dataA[ (i + 1) * floatpitch + (j + 1)]; //SE
         s_data[(threadIdx.x + 2)] = g_dataA[ (i - 1) * floatpitch + (j + 1)]; //NE
 
+        printf("first: %f %f %f\n\n", s_data[threadIdx.x + 1], s_data[threadIdx.x + 1 + blockDim.x], s_data[threadIdx.x + 1 + (2 * blockDim.x)]);
+        printf("second: %f %f %f\n\n", s_data[threadIdx.x + 2], s_data[threadIdx.x + blockDim.x + 2], s_data[threadIdx.x + 2 + (2 * blockDim.x)]);
     }else
     {
         //grab current value in the global memory and store at next value in shared memory because it should be at 1
