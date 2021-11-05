@@ -53,15 +53,15 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     unsigned int currPosition = threadIdx.x;
 
     g_dataB[i * floatpitch + j] = (
-                            0.2f * s_data[currPosition + 1 + blockDim.x]             +       //itself
-                            0.1f * s_data[currPosition + 1]                          +       //N
+                            0.2f * s_data[(currPosition + 1) + blockDim.x]         +       //itself
+                            0.1f * s_data[currPosition + 1]                      +       //N
                             0.1f * s_data[currPosition + 2]                      +       //NE
                             0.1f * s_data[(currPosition + 2) + blockDim.x]       +       //E
                             0.1f * s_data[(currPosition + 2) + (2 * blockDim.x)] +       //SE
-                            0.1f * s_data[currPosition + 1 + (2 * blockDim.x)]       +       //S
-                            0.1f * s_data[(currPosition) + (2 * blockDim.x)] +       //SW
-                            0.1f * s_data[(currPosition) + blockDim.x]       +       //W
-                            0.1f * s_data[currPosition]                              //NW
+                            0.1f * s_data[(currPosition + 1) + (2 * blockDim.x)]   +       //S
+                            0.1f * s_data[(currPosition) + (2 * blockDim.x)]     +       //SW
+                            0.1f * s_data[(currPosition) + blockDim.x]           +       //W
+                            0.1f * s_data[currPosition]                                  //NW
                         ) * 0.95f;
 }
 
